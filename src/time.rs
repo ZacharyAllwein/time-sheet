@@ -48,22 +48,24 @@ pub fn add(time1: Time, time2: Time) -> Time {
 
   return new(time1.hours + time2.hours + ((combined_minutes) / 60),
             (combined_minutes) % 60)
+} 
+
+fn calculate_elapsed_series(acc: Time, mut series: impl Iterator<Item=Time>) -> Time {
+
+  return match series.next() {
+    Some(time) => calculate_elapsed_series(add(acc, sub(time, series.next().unwrap())), series),
+    None => return acc,
+ };
+
 }
+
+
 
 
 pub fn elapsed_series(series: Vec<Time>) -> Result<Time, &'static str> {
 
-  fn calculate_elapsed_series(acc: Time, mut series: impl Iterator<Item=Time>) -> Time {
-
-    return match series.next() {
-        Some(time) => calculate_elapsed_series(add(acc, sub(time, series.next().unwrap())), series),
-        None => return acc,
-    };
-
-  }
-
   if series.len() % 2 != 0 {
-      return Err("odd number of times in arguments");
+    return Err("odd number of times in arguments");
   }
 
   return Ok(calculate_elapsed_series(new(0, 0), series.into_iter()));
