@@ -1,9 +1,21 @@
 mod time;
 
+use std::env::args;
+use std::process;
+
 fn main() {
+  
+  let times = args()
+    .skip(1)
+    .map(|arg| time::from_str(&arg))
+    .collect::<Result<Vec<time::Time>, _>>();
 
-    let time = time::from_str("8:15").unwrap();
-    let time2 = time::from_str("12:45").unwrap();
+  let times = match times {
+    Ok(ts) => ts,
+    _ => process::exit(1)
+  };
 
-    println!("{:?}", time::elapsed(&time, &time2));
+  let elapsed = time::elapsed_series(times).unwrap();
+  
+  println!("{:?}", elapsed);
 }
