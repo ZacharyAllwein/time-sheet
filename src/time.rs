@@ -1,4 +1,5 @@
 use std::error;
+use std::fmt;
 
 #[derive(Debug)]
 pub struct Time {
@@ -7,6 +8,17 @@ pub struct Time {
   pub minutes: u8,
 }
 
+
+impl fmt::Display for Time{
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    let mut mins = self.minutes.to_string();
+    
+    if mins.len() < 2{
+      mins = format!("0{}", mins);
+    }  
+    write!(f, "{}:{}", self.hours, mins)
+  }
+}
 pub fn new(hours: u8, minutes: u8) -> Time{
   return Time {hours, minutes};
 }

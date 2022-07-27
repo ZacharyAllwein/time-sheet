@@ -17,5 +17,5 @@ fn main() {
 
   let elapsed = time::elapsed_series(times).unwrap();
   
-  println!("{:?}", elapsed);
+  println!("{}", elapsed);
 }
